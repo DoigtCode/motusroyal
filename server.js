@@ -15,6 +15,17 @@ function PlayerData(pseudo, address, userID)
     this.pseudo = pseudo;
     this.address = address;
     this.userID = userID;
+
+    this.tries = [];
+    this.nbTry = 0;
+    this.nbHealth = 10;
+    this.nbHealthShow = 10;
+    this.nbArmor = 0;
+    this.nbArmorShow = 0;
+    this.nbAttack = 0;
+    this.nbWords = 0;
+
+    this.isDead = false;
 }
 
 function Room(code, host)
@@ -22,6 +33,10 @@ function Room(code, host)
     this.code = code;
     this.members = [];
     this.members.push(host);
+    this.isOpen = true;
+
+    this.words = ["CACA", "PALADIN", "RUE", "MANGER"];
+    this.nbTryMax = 10;
 }
 
 const server = dgram.createSocket("udp4");
@@ -40,15 +55,20 @@ server.on("message", (from, rinfo) => {
             if (index !== -1)
             {
                 const targetRoom = gameRooms[index];
-                targetRoom.members.push(new PlayerData("test", rinfo.address, from.userID));
+                if (targetRoom.isOpen)
+                {
+                    targetRoom.members.push(new PlayerData("test", rinfo.address, from.userID));
 
-                to = new ServerData(parseInt(process.env.ROOM_CONNECT, 10), from.userID, true);
-                to = JSON.stringify(to);
-                server.send(to, rinfo.port, rinfo.address);
-                console.log("Requête envoyée : " + String(rinfo.address));
-
-                console.log("Joueur ajouté à la room " + targetRoom.code);
-                console.log("Joueurs dans la room " + targetRoom.code + " : " + targetRoom.members.length);
+                    to = new ServerData(parseInt(process.env.ROOM_CONNECT, 10), from.userID, true);
+                    to = JSON.stringify(to);
+                    server.send(to, rinfo.port, rinfo.address);
+                    console.log("Requête envoyée : " + String(rinfo.address));
+    
+                    console.log("Joueur ajouté à la room " + targetRoom.code);
+                    console.log("Joueurs dans la room " + targetRoom.code + " : " + targetRoom.members.length);
+                }
+                else
+                    console.log("Room fermée, joueur refusé.")
             }
             else
             {
@@ -77,9 +97,10 @@ server.on("message", (from, rinfo) => {
             if (index !== -1)
             {
                 const targetRoom = gameRooms[index];
+                targetRoom.isOpen = false;
                 for (var i = 0; i < targetRoom.members.length; i++)
                 {
-                    to = new ServerData(parseInt(process.env.ROOM_START, 10), targetRoom.members[i].userID, true);
+                    to = new ServerData(parseInt(process.env.ROOM_START, 10), targetRoom.members[i].userID, {state : true, room : targetRoom, playerdata : targetRoom.members[i]});
                     to = JSON.stringify(to);
                     server.send(to, rinfo.port, targetRoom.members[i].address);
                     console.log("Requête envoyée : " + String(targetRoom.members[i].address));
