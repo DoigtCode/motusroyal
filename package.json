@@ -1,7 +1,8 @@
 {
   "dependencies": {
     "dgram": "^1.0.1",
-    "dotenv": "^16.4.7"
+    "dotenv": "^16.4.7",
+    "net": "^1.0.2"
   },
   "type": "module"
 }

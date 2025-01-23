@@ -13,7 +13,10 @@ export function generateCode() {
 export function chargerDictionnaire(cheminFichier) {
     try {
         const data = fs.readFileSync(cheminFichier, 'utf8');
-        return data.split('\n').map(word => word.trim()).filter(word => word.length > 0);
+        return data
+            .split('\n')
+            .map(word => word.trim())
+            .filter(word => word.length > 0 && !/^[A-ZÀ-Ý]/.test(word));
     } catch (err) {
         console.error("Erreur lors de la lecture du fichier :", err);
         return [];

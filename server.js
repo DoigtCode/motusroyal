@@ -105,7 +105,7 @@ server.on("message", (from, rinfo) => {
                     to = new ServerData(parseInt(process.env.ROOM_START, 10), targetRoom.members[i].userID, {state : true, room : targetRoom, playerdata : targetRoom.members[i]});
                     to = JSON.stringify(to);
                     server.send(to, targetRoom.members[i].port, targetRoom.members[i].address);
-                    console.log("Requête envoyée : " + String(rinfo.port));
+                    console.log("Requête envoyée : " + String(targetRoom.members[i].address));
                 }
             }
             break;
