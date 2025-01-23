@@ -160,7 +160,7 @@ const server = net.createServer(socket => {
                                 to = new ServerData(parseInt(process.env.ROOM_SYNC, 10), from.userID, {room : targetRoom, playerdata : targetRoom.members[j], targets : targets});
                                 to = JSON.stringify(to);
                                 targetRoom.members[j].socket.write(to);
-                                console.log("Requête envoyée : " + String(targetRoom.members[i].address));
+                                console.log("Requête envoyée : " + String(targetRoom.members[j].address));
                             }
                         }
                     }
