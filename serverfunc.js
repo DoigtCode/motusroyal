@@ -9,7 +9,9 @@ export function sendRequest(requestID, socket, userID, data)
     {
         var to = new ServerData(parseInt(requestID, 10), userID, data);
         to = JSON.stringify(to);
-        socket.write(to);
+        const res = socket.write(to);
+
+        if (res)
         console.log("Requête de type " + String(requestID) + " envoyée : " + String(socket.remoteAddress) + ":" + String(socket.remotePort));
     }
     catch (err)
