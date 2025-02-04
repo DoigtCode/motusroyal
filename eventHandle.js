@@ -12,7 +12,7 @@ export function handleRoomConnect(socket, userID, gameRooms, data)
         if (targetRoom.isOpen)
         {
             targetRoom.members.push(new PlayerData("test", socket.remoteAddress, socket.remotePort, userID, socket));
-            sendRequest(process.env.ROOM_CONNECT, socket, userID, {state : true});
+            sendRequest(process.env.ROOM_CONNECT, socket, userID, {state : true, code : targetRoom.code});
             console.log("Joueur ajouté à la room " + targetRoom.code + "(" + targetRoom.members.length + ")");
         }
         else
