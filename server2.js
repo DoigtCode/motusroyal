@@ -79,7 +79,7 @@ const server = net.createServer(socket => {
         }
         catch (err)
         {
-            console.log("Erreur dans les données reçues par le client : " + err);
+            console.log("Erreur dans les données reçues par le client : " + err + "\nDATA brute reçue avant erreur : " + data);
         }
     });
 
